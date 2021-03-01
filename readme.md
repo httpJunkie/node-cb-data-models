@@ -2,6 +2,29 @@
 
 Learning how to structure JSON documents for a document database goes a little further than the basics of JSON. In preparing this talk I've had to find many different resources and the list below are the best of the best that I could find out there.
 
+## Setting up Couchbase Server (Document Database) Using Docker
+
+The following shell command will setup a Couchbase Docker container with the name: cb using the official Couchbase Docker image.
+
+```shell
+docker pull couchbase
+docker run -d --name cb -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase
+```
+
+With your databse running locally you can access it at localhost:8091, set up a one node cluster:
+
+1. Set Cluster Name (`JSON Data Modeling`)
+2. Set Admin User (`Administrator`)
+3. Set Password (`password`)
+4. Accept Terms
+5. Configure Disk, Memory, Services (Check Data, Query, and Index at minimum)
+
+Once logged in create a new bucket.
+
+1. Select Bucket Tab
+2. Click "ADD BUCKET"
+3. Name your bucket `travel`
+
 ## Learning Videos About JSON Data Modeling
 
 - [Create Data Models JSON](https://www.pluralsight.com/courses/create-data-models-json)
