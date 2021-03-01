@@ -8,6 +8,7 @@ Learning how to structure JSON documents for a document database goes a little f
 - [JSON Data Modeling](https://www.youtube.com/watch?v=S5nNrrgpypU)
 - [MongoDB Schema Design Best Practices](https://www.youtube.com/watch?v=leNCfU5SYR8)
 - [Intro to Data Modeling in JSON](https://www.youtube.com/watch?v=_yv4t93a6OM&list=PLcspbWiU9RushJwSMo71uckW2_hqzDoe4)
+- [JSON Data Modelin for Success and Performance](https://www.youtube.com/watch?v=wwwVYHZhxUc)
 
 ## Links and Resources Used to Develop This Talk
 
