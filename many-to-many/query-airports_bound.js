@@ -8,38 +8,47 @@ const cluster = new couchbase.Cluster("couchbase://localhost", {
 const bucket = cluster.bucket("travel")
 const collection = bucket.defaultCollection()
 
-const createAirportWithAirlinesIndex = async () => {
-  try {
-    const query = `
-      CREATE INDEX \`adv_type_airportId_airlineId\` ON \`travel\`(\`type\`,\`airportId\`,\`airlineId\`)
-    `
-    const result = await cluster.query(query)
-    console.log(`Index Creation: ${result.meta.status}`)
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 const getAirlinesByAirport = async () => {
   try {
     const query = `
-      SELECT airport.name, ARRAY_AGG(airline.name) AS airlines
-      FROM \`travel\` AS airport
-      JOIN \`travel\` AS aa ON META(airport).id = aa.airportId
-      JOIN \`travel\` AS airline ON META(airline).id = aa.airlineId
-      WHERE airport.type = "airport"
-        AND aa.type = "airline_airport" 
-        AND airline.type = "airline"
-      GROUP BY airport.name
+    SELECT airport.*,
+      ARRAY airline.name 
+      FOR airline IN airlines END airlines
+    FROM \`travel\` airport
+    NEST \`travel\` airlines
+      ON KEYS airport.airlines
+    WHERE airport.type = "airport"
+      AND META(airport).id = "airport_1000b"
     `
     const result = await cluster.query(query)
 
-    console.log("Query Result: ")
+    console.log("Query Result for Airlines by Airport: ")
     console.log(result.rows)
   } catch (error) {
     console.error(error)
   }
 }
 
-createAirportWithAirlinesIndex()
-  .then(() => getAirlinesByAirport())
+const getAirportsByAirline = async () => {
+  try {
+    const query = `
+    SELECT airline.*,
+      ARRAY airport.name
+      FOR airport IN airports END airports
+    FROM \`travel\` airline
+    NEST \`travel\` airports
+      ON KEYS airline.airports
+    WHERE airline.type = "airline"
+      AND META(airline).id = "airline_3000b"
+    `
+    const result = await cluster.query(query)
+
+    console.log("Query Result for Airports by Airline: ")
+    console.log(result.rows)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+getAirlinesByAirport()
+getAirportsByAirline()

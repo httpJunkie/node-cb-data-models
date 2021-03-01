@@ -27,7 +27,7 @@ const getHotelWithReviewsRelated = async (hotelKey) => {
         ON KEYS hotel.reviews
       WHERE hotel.type = 'hotel' AND META(hotel).id = $HOTELKEY
     `
-    const options = { parameters: { HOTELID: hotelKey } }
+    const options = { parameters: { HOTELKEY: hotelKey } }
     const result = await cluster.query(query, options)
 
     console.log("Query Result: ")

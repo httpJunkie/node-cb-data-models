@@ -23,14 +23,17 @@ const createAirportWithAirlinesIndex = async () => {
 const getAirlinesByAirport = async () => {
   try {
     const query = `
-      SELECT airport.name, ARRAY_AGG(airline.name) AS airlines
-      FROM \`travel\` AS airport
-      JOIN \`travel\` AS aa ON META(airport).id = aa.airportId
-      JOIN \`travel\` AS airline ON META(airline).id = aa.airlineId
-      WHERE airport.type = "airport"
-        AND aa.type = "airline_airport" 
-        AND airline.type = "airline"
-      GROUP BY airport.name
+    SELECT airport.name, 
+          ARRAY_AGG(airline.name) AS airlines
+    FROM \`travel\` AS airport
+    JOIN \`travel\` AS aa 
+      ON META(airport).id = aa.airportId
+    JOIN \`travel\` AS airline 
+      ON META(airline).id = aa.airlineId
+    WHERE airport.type = "airport"
+      AND aa.type = "airline_airport"
+      AND airline.type = "airline"
+    GROUP BY airport.name
     `
     const result = await cluster.query(query)
 
