@@ -24,7 +24,7 @@ const getAirlinesByAirport = async () => {
   try {
     const query = `
     SELECT airport.name, 
-          ARRAY_AGG(airline.name) AS airlines
+           ARRAY_AGG(airline.name) AS airlines
     FROM \`travel\` AS airport
     JOIN \`travel\` AS aa 
       ON META(airport).id = aa.airportId

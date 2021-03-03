@@ -51,14 +51,14 @@ const getHotelWithAddress = async (hotelKey) => {
     const query = `
       SELECT hotel.*, address
       FROM \`travel\` hotel
-        LEFT JOIN \`travel\` address
-        ON KEYS hotel.address
+      JOIN \`travel\` address
+      ON META(address).id IN hotel.address
       WHERE hotel.type = "hotel" AND META(hotel).id = $HOTELKEY;
     `
     const options = { parameters: { HOTELKEY: hotelKey } }
     const result = await cluster.query(query, options)
 
-    console.log("One to One LEFT JOIN: ")
+    console.log("One to One JOIN: ")
     console.log(result.rows[0])
     console.log(`\n`)
   } catch (error) {
@@ -69,11 +69,13 @@ const getHotelWithAddress = async (hotelKey) => {
 const getHotelWithAddresses = async (hotelKey) => {
   try {
     const query = `
-      SELECT hotel.*, addresses
-      FROM \`travel\` hotel
-        LEFT JOIN \`travel\` addresses
-        ON KEYS hotel.addresses
-        WHERE hotel.type = "hotel" AND META(hotel).id = $HOTELKEY;
+    SELECT hotel.*, addresses
+    FROM \`travel\` hotel
+    JOIN \`travel\` addresses
+      ON META(addresses).id 
+      IN hotel.addresses
+    WHERE hotel.type = "hotel" 
+      AND META(hotel).id = $HOTELKEY;
     `
     const options = { parameters: { HOTELKEY: hotelKey } }
     const result = await cluster.query(query, options)

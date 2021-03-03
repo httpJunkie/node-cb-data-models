@@ -16,7 +16,8 @@ const getAirlinesByAirport = async () => {
       FOR airline IN airlines END airlines
     FROM \`travel\` airport
     NEST \`travel\` airlines
-      ON KEYS airport.airlines
+      ON META(airlines).id 
+      IN airport.airlines
     WHERE airport.type = "airport"
       AND META(airport).id = "airport_1000b"
     `
@@ -24,6 +25,7 @@ const getAirlinesByAirport = async () => {
 
     console.log("Query Result for Airlines by Airport: ")
     console.log(result.rows)
+    console.log("\n")
   } catch (error) {
     console.error(error)
   }
@@ -37,7 +39,8 @@ const getAirportsByAirline = async () => {
       FOR airport IN airports END airports
     FROM \`travel\` airline
     NEST \`travel\` airports
-      ON KEYS airline.airports
+      ON META(airports).id 
+      IN airline.airports
     WHERE airline.type = "airline"
       AND META(airline).id = "airline_3000b"
     `
@@ -45,6 +48,7 @@ const getAirportsByAirline = async () => {
 
     console.log("Query Result for Airports by Airline: ")
     console.log(result.rows)
+    console.log("\n")
   } catch (error) {
     console.error(error)
   }
